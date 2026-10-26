@@ -37,7 +37,7 @@ const App = () => {
   const handleVote = () => {
     const copy = [...votes]
     copy[selected] += 1
-    setVotes(copy)
+    setVotes(copy)    
   }
  
   return (
