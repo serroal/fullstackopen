@@ -36,15 +36,26 @@ const App = () => {
         personService
         .update(personFound.id, personObj)
         .then(updatedPerson => {
-          setErrorMessage(
-          `Updated ${updatedPerson.name}`
-          )
+          setErrorMessage({
+            text: `Updated ${updatedPerson.name}`,
+            type: "success"
+          })
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
           setPersons(persons.map(person => person.id !== updatedPerson.id ? person : updatedPerson))
           setNewName("");
           setNewPhone("");
+        })
+        .catch(() => {
+          setErrorMessage({
+            text: `Information of ${personFound.name} has alredy been removed from the server`,
+            type: "error"
+          })
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== personFound.id))
         })
       }
     } else {
@@ -54,9 +65,10 @@ const App = () => {
       personService
       .create(personObj)
       .then(createdPerson => {
-        setErrorMessage(
-          `Added ${createdPerson.name}`
-        )
+        setErrorMessage({
+          text: `Added ${createdPerson.name}`,
+          type: "success"
+        })
         setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
