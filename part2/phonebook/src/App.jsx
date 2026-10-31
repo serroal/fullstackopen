@@ -47,15 +47,20 @@ const App = () => {
           setNewName("");
           setNewPhone("");
         })
-        .catch(() => {
+        .catch((error) => {
+          const isNofFound = error.response.status === 404
           setErrorMessage({
-            text: `Information of ${personFound.name} has alredy been removed from the server`,
+            text: isNofFound ? 
+              `Information of ${personFound.name} has alredy been removed from the server`:
+              error.response.data.error,
             type: "error"
           })
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-          setPersons(persons.filter(p => p.id !== personFound.id))
+          if(isNofFound){
+            setPersons(persons.filter(p => p.id !== personFound.id))
+          }
         })
       }
     } else {
@@ -75,6 +80,15 @@ const App = () => {
         setPersons([...persons, createdPerson]);
         setNewName("");
         setNewPhone("");
+      })
+      .catch(error => {
+        setErrorMessage({
+          text: error.response.data.error,
+          type: "error"
+        })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
     }
   }
